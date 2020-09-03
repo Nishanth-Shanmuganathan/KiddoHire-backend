@@ -15,6 +15,4 @@ authRouter.post('/register', authentication, registerCredentials)
 
 authRouter.get('/logout', authentication, logout)
 
-authRouter.get('/dash', check)
-
 module.exports = authRouter

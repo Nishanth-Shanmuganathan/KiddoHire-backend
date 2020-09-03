@@ -1,8 +1,8 @@
+var unirest = require("unirest");
+var fs = require("fs");
+var path = require("path");
+
 exports.dashboardBuilder = async (req, res, next) => {
-  console.log("hlooo");
-  var unirest = require("unirest");
-  var fs = require("fs");
-  var path = require("path");
   const user = "employee"
   try {
     const data1 = require(path.join(__dirname, '..', '..', 'public', 'data/hiring-trends.json'))
@@ -49,42 +49,10 @@ exports.dashboardBuilder = async (req, res, next) => {
       result2.push('Recent hiring trends')
       result2.push(chartLabel2)
     }
-
-
-
-
-
-
     res.status(200).send({
       result1, result2
     })
 
-
-
-
-
-    // console.log(data1);
-    // var result = await unirest("GET", "https://newscatcher.p.rapidapi.com/v1/search_free").query({
-    //   "sort_by": "rank",
-    //   "page_size": "100",
-    //   "media": "True",
-    //   "lang": "en",
-    //   "q": "jobs"
-
-    // }).headers({
-    //   "x-rapidapi-host": "newscatcher.p.rapidapi.com",
-    //   "x-rapidapi-key": "be13d2339emsh990703595a99346p1cf446jsn862e9402a187",
-    //   "useQueryString": true
-    // });
-
-    // if (result.error) {
-    //   console.log(result);
-    //   throw new Error()
-    // }
-
-    // res.send({
-    //   feed: result.body.articles
-    // })
   } catch (error) {
     console.log(error);
     res.status(400).send({
@@ -92,4 +60,36 @@ exports.dashboardBuilder = async (req, res, next) => {
     })
   }
 
+}
+exports.feedBuilder = async (req, res) => {
+  const page = req.body.page || 1
+  try {
+    var result = await unirest("GET", "https://newscatcher.p.rapidapi.com/v1/search_free").query({
+      "sort_by": "rank",
+      "page_size": "10",
+      "page": page,
+      "sort_by": 'rate',
+      "media": "True",
+      "lang": "en",
+      "q": "jobs"
+
+    }).headers({
+      "x-rapidapi-host": "newscatcher.p.rapidapi.com",
+      "x-rapidapi-key": "be13d2339emsh990703595a99346p1cf446jsn862e9402a187",
+      "useQueryString": true
+    });
+
+    if (result.error) {
+      console.log(result);
+      throw new Error()
+    }
+    res.send({
+      feeds: result.body.articles
+    })
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      message: 'Unable to fetch news feed'
+    })
+  }
 }

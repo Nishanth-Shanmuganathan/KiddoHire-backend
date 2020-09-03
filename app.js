@@ -17,9 +17,7 @@ app.use(cors())
 
 app.use('/public', express.static('public'))
 app.use('/auth', authRouter)
-app.use('/node-home', homeRouter, (req, res, next) => {
-  console.log('hii');
-})
+app.use('/node-home', homeRouter)
 
 // app.use('/', express.static(path.join(__dirname, 'KiddoHire')))
 
