@@ -1,0 +1,262 @@
+[
+    {
+        "Week": "2019-09-08",
+        "Online": 91,
+        "Direct": 16
+    },
+    {
+        "Week": "2019-09-15",
+        "Online": 96,
+        "Direct": 17
+    },
+    {
+        "Week": "2019-09-22",
+        "Online": 92,
+        "Direct": 15
+    },
+    {
+        "Week": "2019-09-29",
+        "Online": 87,
+        "Direct": 14
+    },
+    {
+        "Week": "2019-10-06",
+        "Online": 79,
+        "Direct": 13
+    },
+    {
+        "Week": "2019-10-13",
+        "Online": 86,
+        "Direct": 19
+    },
+    {
+        "Week": "2019-10-20",
+        "Online": 80,
+        "Direct": 11
+    },
+    {
+        "Week": "2019-10-27",
+        "Online": 75,
+        "Direct": 17
+    },
+    {
+        "Week": "2019-11-03",
+        "Online": 90,
+        "Direct": 14
+    },
+    {
+        "Week": "2019-11-10",
+        "Online": 78,
+        "Direct": 14
+    },
+    {
+        "Week": "2019-11-17",
+        "Online": 83,
+        "Direct": 16
+    },
+    {
+        "Week": "2019-11-24",
+        "Online": 78,
+        "Direct": 14
+    },
+    {
+        "Week": "2019-12-01",
+        "Online": 73,
+        "Direct": 13
+    },
+    {
+        "Week": "2019-12-08",
+        "Online": 70,
+        "Direct": 16
+    },
+    {
+        "Week": "2019-12-15",
+        "Online": 62,
+        "Direct": 14
+    },
+    {
+        "Week": "2019-12-22",
+        "Online": 64,
+        "Direct": 10
+    },
+    {
+        "Week": "2019-12-29",
+        "Online": 60,
+        "Direct": 11
+    },
+    {
+        "Week": "2020-01-05",
+        "Online": 92,
+        "Direct": 17
+    },
+    {
+        "Week": "2020-01-12",
+        "Online": 82,
+        "Direct": 14
+    },
+    {
+        "Week": "2020-01-19",
+        "Online": 82,
+        "Direct": 17
+    },
+    {
+        "Week": "2020-01-26",
+        "Online": 84,
+        "Direct": 18
+    },
+    {
+        "Week": "2020-02-02",
+        "Online": 94,
+        "Direct": 13
+    },
+    {
+        "Week": "2020-02-09",
+        "Online": 82,
+        "Direct": 14
+    },
+    {
+        "Week": "2020-02-16",
+        "Online": 87,
+        "Direct": 17
+    },
+    {
+        "Week": "2020-02-23",
+        "Online": 93,
+        "Direct": 18
+    },
+    {
+        "Week": "2020-03-01",
+        "Online": 85,
+        "Direct": 16
+    },
+    {
+        "Week": "2020-03-08",
+        "Online": 87,
+        "Direct": 15
+    },
+    {
+        "Week": "2020-03-15",
+        "Online": 91,
+        "Direct": 12
+    },
+    {
+        "Week": "2020-03-22",
+        "Online": 81,
+        "Direct": 10
+    },
+    {
+        "Week": "2020-03-29",
+        "Online": 80,
+        "Direct": 10
+    },
+    {
+        "Week": "2020-04-05",
+        "Online": 86,
+        "Direct": 11
+    },
+    {
+        "Week": "2020-04-12",
+        "Online": 83,
+        "Direct": 10
+    },
+    {
+        "Week": "2020-04-19",
+        "Online": 88,
+        "Direct": 8
+    },
+    {
+        "Week": "2020-04-26",
+        "Online": 90,
+        "Direct": 12
+    },
+    {
+        "Week": "2020-05-03",
+        "Online": 91,
+        "Direct": 10
+    },
+    {
+        "Week": "2020-05-10",
+        "Online": 85,
+        "Direct": 13
+    },
+    {
+        "Week": "2020-05-17",
+        "Online": 84,
+        "Direct": 12
+    },
+    {
+        "Week": "2020-05-24",
+        "Online": 80,
+        "Direct": 11
+    },
+    {
+        "Week": "2020-05-31",
+        "Online": 75,
+        "Direct": 11
+    },
+    {
+        "Week": "2020-06-07",
+        "Online": 91,
+        "Direct": 13
+    },
+    {
+        "Week": "2020-06-14",
+        "Online": 86,
+        "Direct": 11
+    },
+    {
+        "Week": "2020-06-21",
+        "Online": 87,
+        "Direct": 15
+    },
+    {
+        "Week": "2020-06-28",
+        "Online": 88,
+        "Direct": 10
+    },
+    {
+        "Week": "2020-07-05",
+        "Online": 75,
+        "Direct": 10
+    },
+    {
+        "Week": "2020-07-12",
+        "Online": 96,
+        "Direct": 18
+    },
+    {
+        "Week": "2020-07-19",
+        "Online": 93,
+        "Direct": 12
+    },
+    {
+        "Week": "2020-07-26",
+        "Online": 84,
+        "Direct": 14
+    },
+    {
+        "Week": "2020-08-02",
+        "Online": 100,
+        "Direct": 13
+    },
+    {
+        "Week": "2020-08-09",
+        "Online": 91,
+        "Direct": 15
+    },
+    {
+        "Week": "2020-08-16",
+        "Online": 93,
+        "Direct": 16
+    },
+    {
+        "Week": "2020-08-23",
+        "Online": 83,
+        "Direct": 15
+    },
+    {
+        "Week": "2020-08-30",
+        "Online": 92,
+        "Direct": 8
+    }
+]

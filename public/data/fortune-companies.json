@@ -1,0 +1,418 @@
+[
+    {
+        "Week": "2019-09-08",
+        "Google": 26,
+        "Microsoft": 2,
+        "Apple": 6,
+        "Flipkart": 1,
+        "Walmart": 30
+    },
+    {
+        "Week": "2019-09-15",
+        "Google": 23,
+        "Microsoft": 2,
+        "Apple": 6,
+        "Flipkart": 1,
+        "Walmart": 32
+    },
+    {
+        "Week": "2019-09-22",
+        "Google": 28,
+        "Microsoft": 1,
+        "Apple": 5,
+        "Flipkart": "<1",
+        "Walmart": 31
+    },
+    {
+        "Week": "2019-09-29",
+        "Google": 25,
+        "Microsoft": 2,
+        "Apple": 5,
+        "Flipkart": "<1",
+        "Walmart": 35
+    },
+    {
+        "Week": "2019-10-06",
+        "Google": 23,
+        "Microsoft": 2,
+        "Apple": 6,
+        "Flipkart": 1,
+        "Walmart": 30
+    },
+    {
+        "Week": "2019-10-13",
+        "Google": 26,
+        "Microsoft": 2,
+        "Apple": 4,
+        "Flipkart": "<1",
+        "Walmart": 32
+    },
+    {
+        "Week": "2019-10-20",
+        "Google": 26,
+        "Microsoft": 1,
+        "Apple": 3,
+        "Flipkart": "<1",
+        "Walmart": 31
+    },
+    {
+        "Week": "2019-10-27",
+        "Google": 24,
+        "Microsoft": 2,
+        "Apple": 5,
+        "Flipkart": "<1",
+        "Walmart": 30
+    },
+    {
+        "Week": "2019-11-03",
+        "Google": 26,
+        "Microsoft": 2,
+        "Apple": 5,
+        "Flipkart": "<1",
+        "Walmart": 38
+    },
+    {
+        "Week": "2019-11-10",
+        "Google": 26,
+        "Microsoft": 2,
+        "Apple": 4,
+        "Flipkart": 1,
+        "Walmart": 32
+    },
+    {
+        "Week": "2019-11-17",
+        "Google": 25,
+        "Microsoft": 2,
+        "Apple": 5,
+        "Flipkart": "<1",
+        "Walmart": 39
+    },
+    {
+        "Week": "2019-11-24",
+        "Google": 17,
+        "Microsoft": 2,
+        "Apple": 3,
+        "Flipkart": "<1",
+        "Walmart": 27
+    },
+    {
+        "Week": "2019-12-01",
+        "Google": 19,
+        "Microsoft": 2,
+        "Apple": 5,
+        "Flipkart": "<1",
+        "Walmart": 36
+    },
+    {
+        "Week": "2019-12-08",
+        "Google": 18,
+        "Microsoft": 1,
+        "Apple": 4,
+        "Flipkart": 1,
+        "Walmart": 28
+    },
+    {
+        "Week": "2019-12-15",
+        "Google": 19,
+        "Microsoft": 1,
+        "Apple": 3,
+        "Flipkart": "<1",
+        "Walmart": 30
+    },
+    {
+        "Week": "2019-12-22",
+        "Google": 12,
+        "Microsoft": 1,
+        "Apple": 4,
+        "Flipkart": "<1",
+        "Walmart": 21
+    },
+    {
+        "Week": "2019-12-29",
+        "Google": 16,
+        "Microsoft": 2,
+        "Apple": 5,
+        "Flipkart": 0,
+        "Walmart": 30
+    },
+    {
+        "Week": "2020-01-05",
+        "Google": 25,
+        "Microsoft": 2,
+        "Apple": 3,
+        "Flipkart": 0,
+        "Walmart": 37
+    },
+    {
+        "Week": "2020-01-12",
+        "Google": 24,
+        "Microsoft": 1,
+        "Apple": 5,
+        "Flipkart": 0,
+        "Walmart": 34
+    },
+    {
+        "Week": "2020-01-19",
+        "Google": 25,
+        "Microsoft": 1,
+        "Apple": 3,
+        "Flipkart": 0,
+        "Walmart": 31
+    },
+    {
+        "Week": "2020-01-26",
+        "Google": 23,
+        "Microsoft": 2,
+        "Apple": 5,
+        "Flipkart": "<1",
+        "Walmart": 27
+    },
+    {
+        "Week": "2020-02-02",
+        "Google": 25,
+        "Microsoft": 2,
+        "Apple": 5,
+        "Flipkart": 1,
+        "Walmart": 28
+    },
+    {
+        "Week": "2020-02-09",
+        "Google": 23,
+        "Microsoft": 1,
+        "Apple": 5,
+        "Flipkart": 0,
+        "Walmart": 28
+    },
+    {
+        "Week": "2020-02-16",
+        "Google": 21,
+        "Microsoft": 1,
+        "Apple": 5,
+        "Flipkart": "<1",
+        "Walmart": 29
+    },
+    {
+        "Week": "2020-02-23",
+        "Google": 21,
+        "Microsoft": 2,
+        "Apple": 4,
+        "Flipkart": 0,
+        "Walmart": 25
+    },
+    {
+        "Week": "2020-03-01",
+        "Google": 20,
+        "Microsoft": 3,
+        "Apple": 4,
+        "Flipkart": "<1",
+        "Walmart": 27
+    },
+    {
+        "Week": "2020-03-08",
+        "Google": 19,
+        "Microsoft": 3,
+        "Apple": 3,
+        "Flipkart": 0,
+        "Walmart": 27
+    },
+    {
+        "Week": "2020-03-15",
+        "Google": 16,
+        "Microsoft": 1,
+        "Apple": 3,
+        "Flipkart": "<1",
+        "Walmart": 70
+    },
+    {
+        "Week": "2020-03-22",
+        "Google": 19,
+        "Microsoft": 3,
+        "Apple": 4,
+        "Flipkart": 0,
+        "Walmart": 100
+    },
+    {
+        "Week": "2020-03-29",
+        "Google": 15,
+        "Microsoft": 3,
+        "Apple": 3,
+        "Flipkart": 0,
+        "Walmart": 57
+    },
+    {
+        "Week": "2020-04-05",
+        "Google": 14,
+        "Microsoft": 4,
+        "Apple": 5,
+        "Flipkart": "<1",
+        "Walmart": 45
+    },
+    {
+        "Week": "2020-04-12",
+        "Google": 28,
+        "Microsoft": 2,
+        "Apple": 4,
+        "Flipkart": "<1",
+        "Walmart": 38
+    },
+    {
+        "Week": "2020-04-19",
+        "Google": 24,
+        "Microsoft": 3,
+        "Apple": 5,
+        "Flipkart": "<1",
+        "Walmart": 42
+    },
+    {
+        "Week": "2020-04-26",
+        "Google": 36,
+        "Microsoft": 3,
+        "Apple": 4,
+        "Flipkart": 0,
+        "Walmart": 39
+    },
+    {
+        "Week": "2020-05-03",
+        "Google": 38,
+        "Microsoft": 2,
+        "Apple": 5,
+        "Flipkart": 1,
+        "Walmart": 39
+    },
+    {
+        "Week": "2020-05-10",
+        "Google": 21,
+        "Microsoft": 3,
+        "Apple": 5,
+        "Flipkart": "<1",
+        "Walmart": 42
+    },
+    {
+        "Week": "2020-05-17",
+        "Google": 23,
+        "Microsoft": 3,
+        "Apple": 6,
+        "Flipkart": 0,
+        "Walmart": 43
+    },
+    {
+        "Week": "2020-05-24",
+        "Google": 22,
+        "Microsoft": 2,
+        "Apple": 7,
+        "Flipkart": 1,
+        "Walmart": 41
+    },
+    {
+        "Week": "2020-05-31",
+        "Google": 19,
+        "Microsoft": 2,
+        "Apple": 5,
+        "Flipkart": "<1",
+        "Walmart": 45
+    },
+    {
+        "Week": "2020-06-07",
+        "Google": 25,
+        "Microsoft": 3,
+        "Apple": 4,
+        "Flipkart": 1,
+        "Walmart": 43
+    },
+    {
+        "Week": "2020-06-14",
+        "Google": 22,
+        "Microsoft": 2,
+        "Apple": 4,
+        "Flipkart": "<1",
+        "Walmart": 41
+    },
+    {
+        "Week": "2020-06-21",
+        "Google": 19,
+        "Microsoft": 2,
+        "Apple": 5,
+        "Flipkart": 1,
+        "Walmart": 39
+    },
+    {
+        "Week": "2020-06-28",
+        "Google": 16,
+        "Microsoft": 2,
+        "Apple": 6,
+        "Flipkart": 1,
+        "Walmart": 37
+    },
+    {
+        "Week": "2020-07-05",
+        "Google": 20,
+        "Microsoft": 2,
+        "Apple": 6,
+        "Flipkart": "<1",
+        "Walmart": 45
+    },
+    {
+        "Week": "2020-07-12",
+        "Google": 19,
+        "Microsoft": 3,
+        "Apple": 4,
+        "Flipkart": 1,
+        "Walmart": 37
+    },
+    {
+        "Week": "2020-07-19",
+        "Google": 20,
+        "Microsoft": 2,
+        "Apple": 4,
+        "Flipkart": 1,
+        "Walmart": 39
+    },
+    {
+        "Week": "2020-07-26",
+        "Google": 24,
+        "Microsoft": 3,
+        "Apple": 5,
+        "Flipkart": 1,
+        "Walmart": 37
+    },
+    {
+        "Week": "2020-08-02",
+        "Google": 21,
+        "Microsoft": 3,
+        "Apple": 6,
+        "Flipkart": 0,
+        "Walmart": 40
+    },
+    {
+        "Week": "2020-08-09",
+        "Google": 20,
+        "Microsoft": 2,
+        "Apple": 6,
+        "Flipkart": "<1",
+        "Walmart": 36
+    },
+    {
+        "Week": "2020-08-16",
+        "Google": 21,
+        "Microsoft": 2,
+        "Apple": 4,
+        "Flipkart": 1,
+        "Walmart": 40
+    },
+    {
+        "Week": "2020-08-23",
+        "Google": 21,
+        "Microsoft": 2,
+        "Apple": 4,
+        "Flipkart": 1,
+        "Walmart": 38
+    },
+    {
+        "Week": "2020-08-30",
+        "Google": 23,
+        "Microsoft": 4,
+        "Apple": 5,
+        "Flipkart": 3,
+        "Walmart": 36
+    }
+]
