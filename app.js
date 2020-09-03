@@ -6,6 +6,7 @@ const cors = require('cors')
 
 const authRouter = require('./src/routes/auth.route')
 const homeRouter = require('./src/routes/home.route')
+const jobsRouter = require('./src/routes/jobs.route')
 
 const { authentication } = require('./src/controllers/auth.controller')
 
@@ -18,6 +19,7 @@ app.use(cors())
 app.use('/public', express.static('public'))
 app.use('/auth', authRouter)
 app.use('/node-home', homeRouter)
+app.use('/node-jobs', jobsRouter)
 
 // app.use('/', express.static(path.join(__dirname, 'KiddoHire')))
 
