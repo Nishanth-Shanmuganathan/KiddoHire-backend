@@ -5,7 +5,7 @@ const otpGenerator = require('otp-generator')
 const request = require('request')
 
 
-const cryptr = new Cryptr('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')
+const cryptr = new Cryptr(env.SG_API)
 
 
 exports.loginController = async (req, res) => {
