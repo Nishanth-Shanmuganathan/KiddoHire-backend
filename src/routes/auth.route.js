@@ -8,9 +8,9 @@ const authRouter = express.Router()
 
 authRouter.post('/login', loginController)
 
-authRouter.post('/email-register', registerEmail)
+authRouter.post('/register', registerEmail)
 
-authRouter.post('/register', authentication, registerCredentials)
+// authRouter.post('/register', authentication, registerCredentials)
 
 
 authRouter.get('/logout', authentication, logout)
