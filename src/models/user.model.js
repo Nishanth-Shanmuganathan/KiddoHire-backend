@@ -21,7 +21,22 @@ const userSchema = mongoose.Schema({
   completion: {
     type: Number,
     default: 10
-  }
+  },
+  description: String,
+  canJoin: Number,
+  experience: Number,
+  work: String,
+  education: String,
+  skills: [String],
+  languages: [String],
+  projects: [{
+    title: String,
+    link: String
+  }],
+  certifications: [{
+    certificate: String,
+    title: String
+  }]
 })
 
 // userSchema.plugin(validator)

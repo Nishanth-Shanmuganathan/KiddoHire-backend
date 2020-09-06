@@ -7,6 +7,7 @@ const cors = require('cors')
 const authRouter = require('./src/routes/auth.route')
 const homeRouter = require('./src/routes/home.route')
 const jobsRouter = require('./src/routes/jobs.route')
+const profileRouter = require('./src/routes/profile.route')
 
 const { authentication } = require('./src/controllers/auth.controller')
 
@@ -17,9 +18,13 @@ app.use(bodyParser.json())
 app.use(cors())
 
 app.use('/public', express.static('public'))
+app.use('/resume', express.static('resume'))
+app.use('/images', express.static('images'))
+app.use('/certificate', express.static('certificate'))
 app.use('/auth', authRouter)
-app.use('/node-home', homeRouter)
-app.use('/node-jobs', jobsRouter)
+app.use('/node-home', authentication, homeRouter)
+app.use('/node-jobs', authentication, jobsRouter)
+app.use('/node-profile', authentication, profileRouter)
 
 // app.use('/', express.static(path.join(__dirname, 'KiddoHire')))
 

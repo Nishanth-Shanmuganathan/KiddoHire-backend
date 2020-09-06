@@ -63,7 +63,7 @@ exports.registerEmail = async (req, res) => {
     }
 
     user.profileName = profileName
-    user.tokens = token
+    user.token = token
     console.log(user);
 
     await registrationMail(email)
@@ -86,11 +86,11 @@ exports.authentication = async (req, res, next) => {
   try {
     const { id } = jwt.decode(token)
     const user = await User.findOne({ _id: id })
-    if (!user || user.tokens !== token) throw new Error('Authentication failed')
+    if (!user || user.token !== token) throw new Error('Authentication failed')
     req.user = user
     next()
   } catch (error) {
-    // console.log(error)
+    console.log(error)
     res.status(400).send({ message: 'Authentication failed' })
   }
 }
@@ -99,7 +99,7 @@ exports.logout = async (req, res) => {
   const id = req.user._id
   try {
     const user = await User.findById(id)
-    user.tokens = ''
+    user.token = ''
     await user.save()
     res.status(200).send({ message: 'Logged out successfully' })
   } catch (error) {
