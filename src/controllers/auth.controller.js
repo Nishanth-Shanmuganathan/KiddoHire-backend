@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 const User = require('./../models/user.model')
 
 const { registrationMail } = require('./../mails/registration.mail')
-const { profile } = require('console')
+
 exports.loginController = async (req, res) => {
   const email = req.body.email.trim()
   const password = req.body.password.trim()
@@ -23,7 +23,7 @@ exports.loginController = async (req, res) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_STRING)
     user.tokens = token
     await user.save()
-    res.status(200).send({ token, user })
+    res.status(200).send({ message: 'Login successful...', token, user })
   } catch (error) {
     // console.log(error);
     res.status(400).send({ message: 'Authentication failed' })
@@ -39,7 +39,6 @@ exports.registerEmail = async (req, res) => {
     return res.status(400).send({ message: 'Password mismatch' })
   }
   try {
-    console.log('what');
     const hashedPassword = await bcrypt.hash(password, 8)
     const user = new User({
       email,
@@ -67,14 +66,17 @@ exports.registerEmail = async (req, res) => {
     user.tokens = token
     console.log(user);
 
-    // registrationMail(email).then(res => console.log(res)).catch(err => console.log(err))
-    // await user.save()
-    res.status(200).send({ message: 'Mail sent successfully', token })
+    await registrationMail(email)
+    const result = await user.save()
+    console.log(user);
+    res.status(200).send({ message: 'Activation link sent to registered mail id...', token, user })
+
   } catch (error) {
     console.log(error);
     if (error.message.includes('User validation failed')) {
       res.status(400).send({ message: 'Email-Id already exists' })
     }
+    res.send({ message: 'Registration failed. Please register again...' })
   }
 }
 

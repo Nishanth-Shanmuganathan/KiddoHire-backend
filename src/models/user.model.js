@@ -4,7 +4,7 @@ const userSchema = mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true
+    // unique: true
   },
   password: {
     type: String,
@@ -16,9 +16,24 @@ const userSchema = mongoose.Schema({
   },
   username: String,
   token: String,
-  role: String
+  role: String,
+  emailVerified: Boolean,
+  completion: {
+    type: Number,
+    default: 10
+  }
 })
 
-userSchema.plugin(validator)
-
+// userSchema.plugin(validator)
+// userSchema.virtual('queries', {
+//   ref: 'Query',
+//   localField: '_id',
+//   foreignField: 'author'
+// })
+userSchema.methods.toJSON = function () {
+  const userObject = this.toObject()
+  delete userObject.password
+  delete userObject.token
+  return userObject
+}
 module.exports = mongoose.model('User', userSchema)
