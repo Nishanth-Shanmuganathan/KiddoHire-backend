@@ -86,7 +86,8 @@ exports.verifyEmail = async (req, res, next) => {
     try {
       const dbUser = await User.findById(user._id)
       dbUser.emailVerified = true
-      res.status(200).send({ message: 'Email verified...', user })
+      await dbUser.save()
+      res.status(200).send({ message: 'Email verified...', user: dbUser })
     } catch (error) {
       res.status(400).send({ message: 'Unable to fetch user...' })
     }
