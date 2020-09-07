@@ -117,9 +117,9 @@ exports.logout = async (req, res) => {
     const user = await User.findById(id)
     user.token = ''
     await user.save()
-    res.status(200).send({ message: 'Logged out successfully' })
+    res.status(200).send({ message: 'Logged out successfully...' })
   } catch (error) {
-    res.status(400).send({ message: 'Cannot logout' })
+    res.status(400).send({ message: 'Unable to logout...' })
   }
 }
 
