@@ -54,7 +54,7 @@ exports.dashboardBuilder = async (req, res, next) => {
     })
 
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(400).send({
       message: 'Unable to fetch news feed'
     })
@@ -80,14 +80,14 @@ exports.feedBuilder = async (req, res) => {
     });
 
     if (result.error) {
-      console.log(result);
+      // console.log(result);
       throw new Error()
     }
     res.send({
       feeds: result.body.articles
     })
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(400).send({
       message: 'Unable to fetch news feed'
     })

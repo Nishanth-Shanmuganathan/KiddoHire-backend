@@ -27,6 +27,7 @@ const userSchema = mongoose.Schema({
   experience: Number,
   work: String,
   education: String,
+  resume: String,
   skills: [String],
   languages: [String],
   projects: [{

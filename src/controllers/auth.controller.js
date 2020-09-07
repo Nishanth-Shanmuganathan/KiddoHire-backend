@@ -15,13 +15,13 @@ exports.loginController = async (req, res) => {
     if (!match) throw new Error()
     if (req.header('Authorization')) {
       const token = req.header('Authorization').replace('Bearer ', '')
-      if (user.tokens === token) {
+      if (user.token === token) {
         return res.status(200).send({ token, user })
       }
     }
     console.log(process.env.JWT_STRING);
     const token = jwt.sign({ id: user._id }, process.env.JWT_STRING)
-    user.tokens = token
+    user.token = token
     await user.save()
     res.status(200).send({ message: 'Login successful...', token, user })
   } catch (error) {
@@ -64,15 +64,14 @@ exports.registerEmail = async (req, res) => {
 
     user.profileName = profileName
     user.token = token
-    console.log(user);
+    // console.log(user);
 
     await registrationMail(email)
     const result = await user.save()
-    console.log(user);
     res.status(200).send({ message: 'Activation link sent to registered mail id...', token, user })
 
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     if (error.message.includes('User validation failed')) {
       res.status(400).send({ message: 'Email-Id already exists' })
     }
@@ -82,10 +81,11 @@ exports.registerEmail = async (req, res) => {
 
 exports.authentication = async (req, res, next) => {
   const token = req.headers.authorization.replace('Bearer ', '')
-  const otp = req.body.otp
   try {
     const { id } = jwt.decode(token)
     const user = await User.findOne({ _id: id })
+    console.log(user.token);
+    console.log(token);
     if (!user || user.token !== token) throw new Error('Authentication failed')
     req.user = user
     next()
