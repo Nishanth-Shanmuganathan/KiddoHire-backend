@@ -1,7 +1,7 @@
 const express = require('express')
 // const bodyParser = require('body-parser')
 
-const { authentication, loginController, registerEmail, registerCredentials, logout, getUser, check } = require('../controllers/auth.controller')
+const { authentication, loginController, registerEmail, verifyEmail, logout } = require('../controllers/auth.controller')
 
 const authRouter = express.Router()
 // authRouter.use(bodyParser.json())
@@ -9,6 +9,9 @@ const authRouter = express.Router()
 authRouter.post('/login', loginController)
 
 authRouter.post('/register', registerEmail)
+
+authRouter.get('/email/:key', authentication, verifyEmail)
+
 
 // authRouter.post('/register', authentication, registerCredentials)
 

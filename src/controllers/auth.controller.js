@@ -50,7 +50,7 @@ exports.registerEmail = async (req, res) => {
     //generating unique username by taking first and last 3 digits of _id, if already present altering accordingly
     const first = user._id.toString().slice(0, 3)
     const last = user._id.toString().slice(user._id.toString().length - 3)
-    const name = user.email.split('.' || '-' || '_' || '@')[0]
+    const name = user.email.split('@')[0]
     let profileName = name + last + first;
     let alreadyExists = true;
     let count = 0;
@@ -64,9 +64,8 @@ exports.registerEmail = async (req, res) => {
 
     user.profileName = profileName
     user.token = token
-    // console.log(user);
-
-    await registrationMail(email)
+    const secretCode = hashedPassword.substr(0, 3) + hashedPassword.substr(hashedPassword.length - 3, 3)
+    await registrationMail(email, user.profileName, secretCode)
     const result = await user.save()
     res.status(200).send({ message: 'Activation link sent to registered mail id...', token, user })
 
@@ -76,6 +75,24 @@ exports.registerEmail = async (req, res) => {
       res.status(400).send({ message: 'Email-Id already exists' })
     }
     res.send({ message: 'Registration failed. Please register again...' })
+  }
+}
+
+exports.verifyEmail = async (req, res, next) => {
+  const userKey = req.params.key
+  const user = req.user
+  const key = user.password.substr(0, 3) + user.password.substr(user.password.length - 3, 3)
+  if (key === userKey) {
+    try {
+      const dbUser = await User.findById(user._id)
+      dbUser.emailVerified = true
+      res.status(200).send({ message: 'Email verified...', user })
+    } catch (error) {
+      res.status(400).send({ message: 'Unable to fetch user...' })
+    }
+  } else {
+    console.log('ihi');
+    res.status(401).send({ message: 'Invalid link...' })
   }
 }
 
