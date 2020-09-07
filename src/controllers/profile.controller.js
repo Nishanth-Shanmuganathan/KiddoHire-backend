@@ -22,11 +22,17 @@ exports.saveProfile = async (req, res) => {
   }
   try {
     const user = await User.findById(req.user._id)
-    user.completion = checkDetailsCompletion(user)
+    if (user.role === "developer") {
+      user.completion = checkDetailsCompletionUser(user)
+    } else {
+      user.completion = checkDetailsCompletionHr(user)
+    }
     user[cred[0]] = cred[1]
     const result = await user.save()
+    console.log(result);
     res.status(200).send({ cred, user })
   } catch (error) {
+    console.log(error);
     res.status(400).send({ message: 'Unable to save profile details' })
   }
 }
@@ -71,8 +77,6 @@ exports.saveImage = async (req, res) => {
 exports.saveCertifications = async (req, res) => {
   const cred = req.body
   const profileName = req.params.profileName
-  console.log(cred.absPath);
-  console.log(cred.title);
   if (req.user.profileName !== profileName) {
     res.status(400).send({ message: 'Unable to edit others details' })
   }
@@ -80,13 +84,12 @@ exports.saveCertifications = async (req, res) => {
     const user = await User.findById(req.user._id)
     user.certifications.push({ title: cred.title, certificate: cred.absPath })
     await user.save()
-    console.log(cred);
     res.status(200).send({ cred: ['certificate', cred], user })
   } catch (error) {
     res.status(400).send({ message: 'Unable to save profile details' })
   }
 }
-checkDetailsCompletion = (user) => {
+checkDetailsCompletionUser = (user) => {
   let completion = 0
   if (user.description) {
     completion += 10
@@ -104,6 +107,28 @@ checkDetailsCompletion = (user) => {
     completion += 10
   }
   if (user.work) {
+    completion += 10
+  }
+  if (user.skills.length) {
+    completion += 10
+  }
+  return completion
+}
+checkDetailsCompletionHr = user => {
+  let completion = 0
+  if (user.description) {
+    completion += 10
+  }
+  if (user.emailVerified) {
+    completion += 10
+  }
+  if (user.username) {
+    completion += 10
+  }
+  if (user.employees) {
+    completion += 10
+  }
+  if (user.careerGrowth) {
     completion += 10
   }
   if (user.skills.length) {

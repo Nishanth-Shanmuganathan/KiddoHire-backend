@@ -23,8 +23,10 @@ const userSchema = mongoose.Schema({
     default: 10
   },
   description: String,
+  careerGrowth: String,
   canJoin: Number,
   experience: Number,
+  employees: Number,
   work: String,
   education: String,
   resume: String,
@@ -38,6 +40,10 @@ const userSchema = mongoose.Schema({
   certifications: [{
     certificate: String,
     title: String
+  }],
+  reviews: [{
+    review: String,
+    author: String
   }]
 })
 
