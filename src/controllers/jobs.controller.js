@@ -1,4 +1,6 @@
-var unirest = require("unirest");
+const unirest = require("unirest");
+const Job = require('./../models/job.model')
+const User = require('./../models/user.model')
 
 exports.searchCity = async (req, res) => {
   const string = req.params.city
@@ -16,5 +18,24 @@ exports.searchCity = async (req, res) => {
     res.status(200).send({ data })
   } catch (error) {
     res.status(400).send({ message: 'No cities found' })
+  }
+}
+
+exports.addJob = async (req, res) => {
+  const user = req.user
+  if (user.role !== 'hr') {
+    return res.status(400).send({ message: 'Restricted user permissions' })
+  }
+  try {
+    const job = new Job(req.body)
+    job.postedBy = user._id
+    await job.save()
+    const dbUser = await User.findById(user._id)
+    dbUser.jobs.push(job._id)
+    await dbUser.save()
+    res.status(200).send({ message: 'New job posted' })
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({ message: 'Unable to add job' })
   }
 }

@@ -44,7 +44,11 @@ const userSchema = mongoose.Schema({
   reviews: [{
     review: String,
     author: String
-  }]
+  }],
+  jobs: {
+    type: [mongoose.Schema.Types.ObjectId],
+    default: []
+  }
 })
 
 userSchema.plugin(validator)
