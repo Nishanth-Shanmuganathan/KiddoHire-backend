@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const jobSchema = mongoose.Schema({
   postedBy: {
     type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
     required: true
   },
   designation: {
@@ -50,6 +51,7 @@ const jobSchema = mongoose.Schema({
   },
   applicants: {
     type: [mongoose.Schema.Types.ObjectId],
+    ref: 'User',
     default: []
   }
 })

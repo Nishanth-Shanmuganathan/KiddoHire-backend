@@ -39,3 +39,19 @@ exports.addJob = async (req, res) => {
     res.status(400).send({ message: 'Unable to add job' })
   }
 }
+
+exports.fetchJobs = async (req, res) => {
+  const user = req.user
+  let jobs;
+  try {
+    if (user.role === 'hr') {
+      jobs = await Job.find({ postedBy: user._id }).populate('postedBy')
+    } else {
+      jobs = await Job.find({ skills: { $in: user.skills } }).populate('postedBy')
+    }
+    res.status(200).send({ jobs })
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({ message: 'Unable to fetch jobs' })
+  }
+}
