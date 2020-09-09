@@ -8,6 +8,7 @@ const authRouter = require('./src/routes/auth.route')
 const homeRouter = require('./src/routes/home.route')
 const jobsRouter = require('./src/routes/jobs.route')
 const profileRouter = require('./src/routes/profile.route')
+const followsRouter = require('./src/routes/follows.route')
 
 const { authentication } = require('./src/controllers/auth.controller')
 
@@ -26,6 +27,7 @@ app.use('/auth', authRouter)
 app.use('/node-home', authentication, homeRouter)
 app.use('/node-jobs', authentication, jobsRouter)
 app.use('/node-profile', authentication, profileRouter)
+app.use('/node-follows', authentication, followsRouter)
 
 // app.use('/', express.static(path.join(__dirname, 'KiddoHire')))
 

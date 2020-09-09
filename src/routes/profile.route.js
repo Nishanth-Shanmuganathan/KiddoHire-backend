@@ -1,6 +1,6 @@
 const express = require('express')
 
-const { fetchProfile, saveProfile, saveResume, saveImage, saveCertifications } = require('./../controllers/profile.controller')
+const { fetchProfile, saveProfile, saveResume, saveImage, saveCertifications, addReviews } = require('./../controllers/profile.controller')
 
 
 const multer = require('multer')
@@ -75,6 +75,8 @@ const profileRouter = express.Router()
 profileRouter.get('/:profileName', fetchProfile)
 
 profileRouter.patch('/:profileName', saveProfile)
+
+profileRouter.patch('/reviews/:profileName', addReviews)
 
 profileRouter.patch('/resume/:profileName', multer({ storage: resumeStorage }).single('resume'), saveResume)
 

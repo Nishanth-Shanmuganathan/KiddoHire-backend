@@ -25,6 +25,7 @@ exports.comparisonReport = (to, username, jobName, postedBy, profileMatch, jobMa
     Candidates with experience of 16-20 years : ${experience['16-20'] || 0}<br/><br/>
 
     You can join in ${profileCanJoin} months<br/>
+    Candidates who can join immediately : ${canJoin['0'] || 0}<br/>
     Candidates who can join in 1 month : ${canJoin['1'] || 0}<br/>
     Candidates who can join in 2 months : ${canJoin['2'] || 0}<br/>
     Candidates who can join in 3 months : ${canJoin['3'] || 0}<br/>

@@ -51,12 +51,12 @@ exports.applyJob = async (req, res, next) => {
     const job = await Job.findById(jobId)
     if (!job) { throw new Error() }
     const dbUser = await User.findById(user._id)
-    let count = 0;
-    job.skills.forEach(element => {
-      count = dbUser.skills.indexOf(element) + 1 ? count + 1 : count
-    });
+    // let count = 0;
+    // job.skills.forEach(element => {
+    //   count = dbUser.skills.indexOf(element) + 1 ? count + 1 : count
+    // });
     dbUser.jobs.push(job._id)
-    job.applicants.push({ applicant: user._id, jobMatch: parseInt(count / job.skills.length * 100) })
+    job.applicants.push({ applicant: user._id, jobMatch: matchCalculator(job.skills, dbUser.skills) })
     await dbUser.save()
     await job.save()
     let jobs = await Job.find({ $and: [{ skills: { $in: user.skills } }, { _id: { $nin: dbUser.jobs } }] }).populate('postedBy')
@@ -117,7 +117,7 @@ exports.generateReport = async (req, res) => {
         exp['11-15'] = exp['11-15'] ? exp['11-15'] + 1 : 1
       } else if (ele.applicant.experience > 5) {
         exp['6-10'] = exp['6-10'] ? exp['6-10'] + 1 : 1
-      } else if (ele.applicant.experience > 0) {
+      } else if (ele.applicant.experience >= 0) {
         exp['0-5'] = exp['0-5'] ? exp['0-5'] + 1 : 1
       }
 
@@ -130,7 +130,7 @@ exports.generateReport = async (req, res) => {
         jobMatch['40-60'] = jobMatch['40-60'] ? jobMatch['40-60'] + 1 : 1
       } else if (ele.jobMatch > 20) {
         jobMatch['20-40'] = jobMatch['20-40'] ? jobMatch['20-40'] + 1 : 1
-      } else if (ele.jobMatch > 0) {
+      } else if (ele.jobMatch >= 0) {
         jobMatch['0-20'] = jobMatch['0-20'] ? jobMatch['0-20'] + 1 : 1
       }
 
@@ -142,10 +142,19 @@ exports.generateReport = async (req, res) => {
         canJoin[ele.applicant.canJoin] = canJoin[ele.applicant.canJoin] ? canJoin[ele.applicant.canJoin] + 1 : 1
       }
     })
-    await comparisonReport(user.email, user.username || user.profileName, job.designation, job.postedBy.username, 80, jobMatch, user.experience, exp, user.canJoin, canJoin)
-    res.status(200).send({ message: 'Check your inbox for the compared report...', job })
+    await comparisonReport(user.email, user.username || user.profileName, job.designation, job.postedBy.username, matchCalculator(job.skills, user.skills), jobMatch, user.experience, exp, user.canJoin, canJoin)
+
+    res.status(200).send({ message: 'Report sent to your mail-id. Kindly check your inbox for the profile comparison report...' })
   } catch (error) {
     console.log(error);
-    res.status(400).send({ message: 'Unable to send report' })
+    res.status(400).send({ message: 'Unable to send profile comparison report... Please try again.' })
   }
+}
+
+matchCalculator = (arr, arr2) => {
+  let count = 0;
+  arr.forEach(element => {
+    count = arr2.indexOf(element) + 1 ? count + 1 : count
+  });
+  return parseInt(count / arr.length * 100)
 }
