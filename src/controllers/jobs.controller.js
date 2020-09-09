@@ -46,15 +46,23 @@ exports.applyJob = async (req, res, next) => {
   if (user.role === 'hr') {
     return res.status(400).send({ message: 'Restricted user permissions' })
   }
+
   try {
     const job = await Job.findById(jobId)
     if (!job) { throw new Error() }
     const dbUser = await User.findById(user._id)
+    let count = 0;
+    job.skills.forEach(element => {
+      count = dbUser.skills.indexOf(element) + 1 ? count + 1 : count
+    });
     dbUser.jobs.push(job._id)
-    job.applicants.push({ applicant: user._id, jobMatch: 80 })
+    job.applicants.push({ applicant: user._id, jobMatch: parseInt(count / job.skills.length * 100) })
     await dbUser.save()
     await job.save()
-    const jobs = await Job.find({ $and: [{ skills: { $in: user.skills } }, { _id: { $nin: dbUser.jobs } }] }).populate('postedBy')
+    let jobs = await Job.find({ $and: [{ skills: { $in: user.skills } }, { _id: { $nin: dbUser.jobs } }] }).populate('postedBy')
+    if (!jobs.length) {
+      jobs = await Job.find({ _id: { $nin: user.jobs } }).populate('postedBy')
+    }
     res.status(200).send({ message: 'Job applied', jobs })
   } catch (error) {
     console.log(error);
@@ -62,7 +70,20 @@ exports.applyJob = async (req, res, next) => {
   }
 }
 
+exports.fetchAppliedJobs = async (req, res) => {
+  const user = req.user
+  let jobs;
+  try {
+    jobs = await Job.find({ _id: { $in: user.jobs } }).populate('postedBy')
+    res.status(200).send({ jobs })
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({ message: 'Unable to fetch jobs' })
+  }
+}
+
 exports.fetchJobs = async (req, res) => {
+  console.log('applied');
   const user = req.user
   let jobs;
   try {
@@ -70,6 +91,9 @@ exports.fetchJobs = async (req, res) => {
       jobs = await Job.find({ postedBy: user._id }).populate('postedBy')
     } else {
       jobs = await Job.find({ $and: [{ skills: { $in: user.skills } }, { _id: { $nin: user.jobs } }] }).populate('postedBy')
+      if (!jobs.length) {
+        jobs = await Job.find({ _id: { $nin: user.jobs } }).populate('postedBy')
+      }
     }
     res.status(200).send({ jobs })
   } catch (error) {

@@ -1,13 +1,15 @@
 const express = require('express')
 // const bodyParser = require('body-parser')
 
-const { searchCity, addJob, fetchJobs, applyJob } = require('./../controllers/jobs.controller')
+const { searchCity, addJob, fetchJobs, fetchAppliedJobs, applyJob } = require('./../controllers/jobs.controller')
 
 const jobRouter = express.Router()
 
 jobRouter.get('/city/:city', searchCity)
 
 jobRouter.get('/jobs', fetchJobs)
+
+jobRouter.get('/jobs-applied', fetchAppliedJobs)
 
 jobRouter.get('/job/:jobId', applyJob, fetchJobs)
 
