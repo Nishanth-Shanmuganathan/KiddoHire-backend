@@ -40,6 +40,28 @@ exports.addJob = async (req, res) => {
   }
 }
 
+exports.applyJob = async (req, res, next) => {
+  const user = req.user
+  const jobId = req.params.jobId
+  if (user.role === 'hr') {
+    return res.status(400).send({ message: 'Restricted user permissions' })
+  }
+  try {
+    const job = await Job.findById(jobId)
+    if (!job) { throw new Error() }
+    const dbUser = await User.findById(user._id)
+    dbUser.jobs.push(job._id)
+    job.applicants.push({ applicant: user._id, jobMatch: 80 })
+    await dbUser.save()
+    await job.save()
+    const jobs = await Job.find({ $and: [{ skills: { $in: user.skills } }, { _id: { $nin: dbUser.jobs } }] }).populate('postedBy')
+    res.status(200).send({ message: 'Job applied', jobs })
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({ message: 'Unable to apply' })
+  }
+}
+
 exports.fetchJobs = async (req, res) => {
   const user = req.user
   let jobs;
@@ -47,7 +69,7 @@ exports.fetchJobs = async (req, res) => {
     if (user.role === 'hr') {
       jobs = await Job.find({ postedBy: user._id }).populate('postedBy')
     } else {
-      jobs = await Job.find({ skills: { $in: user.skills } }).populate('postedBy')
+      jobs = await Job.find({ $and: [{ skills: { $in: user.skills } }, { _id: { $nin: user.jobs } }] }).populate('postedBy')
     }
     res.status(200).send({ jobs })
   } catch (error) {

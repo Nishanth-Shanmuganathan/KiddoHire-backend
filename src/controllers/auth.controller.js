@@ -102,7 +102,12 @@ exports.authentication = async (req, res, next) => {
   try {
     const { id } = jwt.decode(token)
     const user = await User.findOne({ _id: id })
-    if (!user || user.token !== token) throw new Error('Authentication failed')
+    if (!user || user.token !== token) {
+      console.log(!user, user.token !== token);
+      console.log(token);
+      console.log(user.token);
+      throw new Error('Authentication failed')
+    }
     req.user = user
     next()
   } catch (error) {

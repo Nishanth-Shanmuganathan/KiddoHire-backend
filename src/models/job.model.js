@@ -50,8 +50,13 @@ const jobSchema = mongoose.Schema({
     required: true
   },
   applicants: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: 'User',
+    type: [{
+      applicant: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+      },
+      jobMatch: Number
+    }],
     default: []
   }
 })
