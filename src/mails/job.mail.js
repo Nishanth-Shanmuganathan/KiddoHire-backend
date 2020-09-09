@@ -1,11 +1,12 @@
 const sendgrid = require('@sendgrid/mail')
 
 sendgrid.setApiKey(process.env.API_KEY)
+const from = 'nishanth.mailer@gmail.com'
 
 exports.comparisonReport = (to, username, jobName, postedBy, profileMatch, jobMatch, profileExp, experience, profileCanJoin, canJoin) => {
   return sendgrid.send({
     to,
-    from: 'nishanth.mailer@gmail.com',
+    from,
     subject: 'Profile comparison report form KiddoHire',
     html: `
     <h5>Hi ${username},</h5><br/>
@@ -42,5 +43,20 @@ exports.comparisonReport = (to, username, jobName, postedBy, profileMatch, jobMa
     Thank you,<br/>
     KiddoHire Dev
     `
+  })
+}
+
+exports.roundResult = (to, cleared, username, designation, postedBy, round) => {
+  let html;
+  if (cleared) {
+    html = `<h5>Hi ${username},</h5><br/>We are happy to inform you that you have made through the ${round} round for the interview process of ${designation} position at ${postedBy}.Soon you will be receiving the interview dates and tips. Stay tuned.<br/><br/>Thank you<br/>KiddoHire Dev`
+  } else {
+    html = `<h5>Hi ${username},</h5><br/>We encourage your interest in ${designation} position at ${postedBy}.But we are sorry to inform that you do not make through the ${round} round. <br/><br/>Please don't loose hope. Tons of jobs are waiting for you. Keep trying.<br/><br/>Thank you<br/>KiddoHire Dev`
+  }
+  return sendgrid.send({
+    to,
+    from,
+    subject: 'Profile comparison report form KiddoHire',
+    html
   })
 }

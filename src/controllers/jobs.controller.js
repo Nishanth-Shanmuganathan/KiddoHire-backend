@@ -1,7 +1,7 @@
 const unirest = require("unirest");
 const Job = require('./../models/job.model')
 const User = require('./../models/user.model')
-const { comparisonReport } = require('./../mails/job.mail')
+const { comparisonReport, roundResult } = require('./../mails/job.mail')
 exports.searchCity = async (req, res) => {
   const string = req.params.city
   try {
@@ -48,20 +48,22 @@ exports.applyJob = async (req, res, next) => {
   }
 
   try {
-    const job = await Job.findById(jobId)
+    const job = await Job.findById(jobId).populate('postedBy')
     if (!job) { throw new Error() }
     const dbUser = await User.findById(user._id)
-    // let count = 0;
-    // job.skills.forEach(element => {
-    //   count = dbUser.skills.indexOf(element) + 1 ? count + 1 : count
-    // });
+    const jobMatch = matchCalculator(job.skills, dbUser.skills)
     dbUser.jobs.push(job._id)
-    job.applicants.push({ applicant: user._id, jobMatch: matchCalculator(job.skills, dbUser.skills) })
+    job.applicants.push({ applicant: user._id, jobMatch, status: { cleared: jobMatch > 20, stage: 'Preliminary Test' } })
+    // console.log({ applicant: user._id, jobMatch, status: { cleared: jobMatch > 20, stage: 'Preliminary Test' } });
+    console.log(job.applicants[job.applicants.length - 1]);
     await dbUser.save()
     await job.save()
+    console.log(job.applicants[job.applicants.length - 1].status);
+    await roundResult(user.email, jobMatch > 20, user.username || user.profileName, job.designation, job.postedBy.username, 'Preliminary')
+    console.log('mail sent');
     let jobs = await Job.find({ $and: [{ skills: { $in: user.skills } }, { _id: { $nin: dbUser.jobs } }] }).populate('postedBy')
     if (!jobs.length) {
-      jobs = await Job.find({ _id: { $nin: user.jobs } }).populate('postedBy')
+      jobs = await Job.find({ _id: { $nin: dbUser.jobs } }).populate('postedBy')
     }
     res.status(200).send({ message: 'Job applied', jobs })
   } catch (error) {

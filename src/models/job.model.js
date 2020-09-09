@@ -55,7 +55,13 @@ const jobSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
       },
-      jobMatch: Number
+      jobMatch: Number,
+      status: {
+        type: [{
+          cleared: Boolean,
+          stage: String
+        }]
+      }
     }],
     default: []
   }

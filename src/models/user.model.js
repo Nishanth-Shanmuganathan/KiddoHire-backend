@@ -47,12 +47,6 @@ const userSchema = mongoose.Schema({
   }],
   jobs: {
     type: [mongoose.Schema.Types.ObjectId],
-    ref: 'Job',
-    default: []
-  },
-  follows: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: 'User',
     default: []
   }
 })
