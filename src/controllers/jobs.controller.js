@@ -1,7 +1,7 @@
 const unirest = require("unirest");
 const Job = require('./../models/job.model')
 const User = require('./../models/user.model')
-
+const { comparisonReport } = require('./../mails/job.mail')
 exports.searchCity = async (req, res) => {
   const string = req.params.city
   try {
@@ -83,7 +83,6 @@ exports.fetchAppliedJobs = async (req, res) => {
 }
 
 exports.fetchJobs = async (req, res) => {
-  console.log('applied');
   const user = req.user
   let jobs;
   try {
@@ -99,5 +98,54 @@ exports.fetchJobs = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(400).send({ message: 'Unable to fetch jobs' })
+  }
+}
+
+exports.generateReport = async (req, res) => {
+  const user = req.user
+  const jobId = req.params.jobId
+  try {
+    const job = await Job.findById(jobId).populate('postedBy').populate('applicants.applicant')
+    let exp = {}
+    let jobMatch = {}
+    let canJoin = {}
+    job.applicants.forEach(ele => {
+      //Calculating experience
+      if (ele.applicant.experience > 15) {
+        exp['16-20'] = exp['16-20'] ? exp['16-20'] + 1 : 1
+      } else if (ele.applicant.experience > 10) {
+        exp['11-15'] = exp['11-15'] ? exp['11-15'] + 1 : 1
+      } else if (ele.applicant.experience > 5) {
+        exp['6-10'] = exp['6-10'] ? exp['6-10'] + 1 : 1
+      } else if (ele.applicant.experience > 0) {
+        exp['0-5'] = exp['0-5'] ? exp['0-5'] + 1 : 1
+      }
+
+      //Calculating jobMatch
+      if (ele.jobMatch > 80) {
+        jobMatch['80-100'] = jobMatch['80-100'] ? jobMatch['80-100'] + 1 : 1
+      } else if (ele.jobMatch > 60) {
+        jobMatch['60-80'] = jobMatch['60-80'] ? jobMatch['60-80'] + 1 : 1
+      } else if (ele.jobMatch > 40) {
+        jobMatch['40-60'] = jobMatch['40-60'] ? jobMatch['40-60'] + 1 : 1
+      } else if (ele.jobMatch > 20) {
+        jobMatch['20-40'] = jobMatch['20-40'] ? jobMatch['20-40'] + 1 : 1
+      } else if (ele.jobMatch > 0) {
+        jobMatch['0-20'] = jobMatch['0-20'] ? jobMatch['0-20'] + 1 : 1
+      }
+
+      //can join
+
+      if (ele.applicant.canJoin > 11) {
+        canJoin["12"] = canJoin["12"] ? canJoin["12"] + 1 : 1
+      } else {
+        canJoin[ele.applicant.canJoin] = canJoin[ele.applicant.canJoin] ? canJoin[ele.applicant.canJoin] + 1 : 1
+      }
+    })
+    await comparisonReport(user.email, user.username || user.profileName, job.designation, job.postedBy.username, 80, jobMatch, user.experience, exp, user.canJoin, canJoin)
+    res.status(200).send({ message: 'Check your inbox for the compared report...', job })
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({ message: 'Unable to send report' })
   }
 }
