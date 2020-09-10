@@ -52,14 +52,15 @@ exports.applyJob = async (req, res, next) => {
     if (!job) { throw new Error() }
     const dbUser = await User.findById(user._id)
     const jobMatch = matchCalculator(job.skills, dbUser.skills)
-    dbUser.jobs.push(job._id)
-    job.applicants.push({ applicant: user._id, jobMatch, status: { cleared: jobMatch > 20, stage: 'Preliminary Test' } })
-    // console.log({ applicant: user._id, jobMatch, status: { cleared: jobMatch > 20, stage: 'Preliminary Test' } });
-    console.log(job.applicants[job.applicants.length - 1]);
-    await dbUser.save()
-    await job.save()
-    console.log(job.applicants[job.applicants.length - 1].status);
-    await roundResult(user.email, jobMatch > 20, user.username || user.profileName, job.designation, job.postedBy.username, 'Preliminary')
+    if (jobMatch) {
+      dbUser.jobs.push(job._id)
+      job.applicants.push({ applicant: user._id, jobMatch, status: { cleared: jobMatch > 20, stage: 'Preliminary Test' } })
+      // console.log({ applicant: user._id, jobMatch, status: { cleared: jobMatch > 20, stage: 'Preliminary Test' } });
+      console.log(job.applicants[job.applicants.length - 1]);
+      await dbUser.save()
+      await job.save()
+    }
+    await roundResult(user.email, jobMatch !== 0, user.username || user.profileName, job.designation, job.postedBy.username, 'Preliminary')
     console.log('mail sent');
     let jobs = await Job.find({ $and: [{ skills: { $in: user.skills } }, { _id: { $nin: dbUser.jobs } }] }).populate('postedBy')
     if (!jobs.length) {
@@ -89,7 +90,7 @@ exports.fetchJobs = async (req, res) => {
   let jobs;
   try {
     if (user.role === 'hr') {
-      jobs = await Job.find({ postedBy: user._id }).populate('postedBy')
+      jobs = await Job.find({ postedBy: user._id }).populate('postedBy').populate('applicants.applicant')
     } else {
       jobs = await Job.find({ $and: [{ skills: { $in: user.skills } }, { _id: { $nin: user.jobs } }] }).populate('postedBy')
       if (!jobs.length) {
@@ -159,4 +160,26 @@ matchCalculator = (arr, arr2) => {
     count = arr2.indexOf(element) + 1 ? count + 1 : count
   });
   return parseInt(count / arr.length * 100)
+}
+
+exports.rejectApplicant = async (req, res) => {
+  const user = req.user
+  let jobId = req.params.jobId
+  let applicantId = req.params.userId
+  try {
+    if (user.role !== 'hr') {
+      return res.status(401).send({ message: 'Restricted user access' })
+    }
+    job = await Job.findById(jobId)
+    if (!job) {
+      throw new Error()
+    }
+    const index = job.applicants.findIndex(applicant => applicant.applicant === applicantId)
+    job.applicants.splice(index, 1)
+    await job.save()
+    res.status(200).send({ message: 'Applicant rejected' })
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({ message: 'Unable to reject applicant' })
+  }
 }
