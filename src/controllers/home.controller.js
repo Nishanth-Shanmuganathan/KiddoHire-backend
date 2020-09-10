@@ -3,7 +3,7 @@ var fs = require("fs");
 var path = require("path");
 
 exports.dashboardBuilder = async (req, res, next) => {
-  const user = "employee"
+  const user = req.user.role
   try {
     const data1 = require(path.join(__dirname, '..', '..', 'public', 'data/hiring-trends.json'))
     const firstLabelData1 = '2020'
@@ -20,7 +20,7 @@ exports.dashboardBuilder = async (req, res, next) => {
 
     let result2 = []
 
-    if (user === "employee") {
+    if (user === "developer") {
       data2 = require(path.join(__dirname, '..', '..', 'public', 'data/fortune-companies.json'))
       const firstLabelData2 = 'Google'
       const secondLabelData2 = 'Microsoft'
@@ -62,6 +62,14 @@ exports.dashboardBuilder = async (req, res, next) => {
 
 }
 exports.feedBuilder = async (req, res) => {
+  const user = req.user
+  let keyword;
+  if (user.role === 'hr') {
+    keyword = 'hire'
+  } else {
+    keyword = 'job'
+  }
+  console.log(keyword);
   const page = req.body.page || 1
   try {
     var result = await unirest("GET", "https://newscatcher.p.rapidapi.com/v1/search_free").query({
@@ -71,7 +79,7 @@ exports.feedBuilder = async (req, res) => {
       "sort_by": 'rate',
       "media": "True",
       "lang": "en",
-      "q": "jobs"
+      "q": keyword
 
     }).headers({
       "x-rapidapi-host": "newscatcher.p.rapidapi.com",

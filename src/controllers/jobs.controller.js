@@ -77,7 +77,8 @@ exports.fetchAppliedJobs = async (req, res) => {
   const user = req.user
   let jobs;
   try {
-    jobs = await Job.find({ _id: { $in: user.jobs } }).populate('postedBy')
+    jobs = await Job.find({ 'applicants.applicant': { $in: user._id } }).populate('postedBy')
+    console.log(jobs);
     res.status(200).send({ jobs })
   } catch (error) {
     console.log(error);
