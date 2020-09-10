@@ -3,6 +3,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+var cron = require('node-cron');
 
 const authRouter = require('./src/routes/auth.route')
 const homeRouter = require('./src/routes/home.route')
@@ -11,6 +12,7 @@ const profileRouter = require('./src/routes/profile.route')
 const followsRouter = require('./src/routes/follows.route')
 
 const { authentication } = require('./src/controllers/auth.controller')
+const { weeklyMail } = require('./src/mails/job.mail')
 
 const app = express()
 
@@ -29,11 +31,17 @@ app.use('/node-jobs', authentication, jobsRouter)
 app.use('/node-profile', authentication, profileRouter)
 app.use('/node-follows', authentication, followsRouter)
 
-// app.use('/', express.static(path.join(__dirname, 'KiddoHire')))
+app.use('/', express.static(path.join(__dirname, 'KiddoHire')))
 
-// app.use((req, res, next) => {
-//   res.sendFile(path.join(__dirname, 'KiddoHire', 'index.html'))
-// })
+app.use((req, res, next) => {
+  res.sendFile(path.join(__dirname, 'KiddoHire', 'index.html'))
+})
+
+//Wee
+cron.schedule('* * * * Sunday', () => {
+  weeklyMail()
+});
+
 const port = process.env.PORT || 3000
 mongoose.connect(process.env.DB_LINK, {
   useNewUrlParser: true,

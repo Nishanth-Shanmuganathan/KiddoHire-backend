@@ -60,7 +60,7 @@ exports.applyJob = async (req, res, next) => {
       await dbUser.save()
       await job.save()
     }
-    await roundResult(user.email, jobMatch !== 0, user.username || user.profileName, job.designation, job.postedBy.username, 'Preliminary')
+    await roundResult(user.email, jobMatch !== 0, user.username || user.profileName, job.designation, job.postedBy.username)
     console.log('mail sent');
     let jobs = await Job.find({ $and: [{ skills: { $in: user.skills } }, { _id: { $nin: dbUser.jobs } }] }).populate('postedBy')
     if (!jobs.length) {
@@ -170,16 +170,43 @@ exports.rejectApplicant = async (req, res) => {
     if (user.role !== 'hr') {
       return res.status(401).send({ message: 'Restricted user access' })
     }
-    job = await Job.findById(jobId)
+    job = await Job.findById(jobId).populate('postedBy')
     if (!job) {
       throw new Error()
     }
     const index = job.applicants.findIndex(applicant => applicant.applicant === applicantId)
     job.applicants.splice(index, 1)
     await job.save()
+    const applicant = await User.findOne({ profileName: applicantId })
+    await roundResult(applicant.email, false, applicant.username || applicant.profileName, job.designation, job.postedBy.username)
     res.status(200).send({ message: 'Applicant rejected' })
   } catch (error) {
     console.log(error);
     res.status(400).send({ message: 'Unable to reject applicant' })
+  }
+}
+
+exports.shortlistApplicant = async (req, res) => {
+  const user = req.user
+  let jobId = req.params.jobId
+  let applicantId = req.params.userId
+  try {
+    if (user.role !== 'hr') {
+      return res.status(401).send({ message: 'Restricted user access' })
+    }
+    job = await Job.findById(jobId).populate('postedBy')
+    if (!job) {
+      throw new Error()
+    }
+    const index = job.applicants.findIndex(applicant => applicant.applicant === applicantId)
+    const applicant = await User.findOne({ profileName: applicantId })
+    job.applicants.splice(index, 1)
+    job.shortlisted.push({ applicant: applicant._id, accepted: false })
+    await job.save()
+    await roundResult(applicant.email, true, applicant.username || applicant.profileName, job.designation, job.postedBy.username)
+    res.status(200).send({ message: 'Applicant shortlisted' })
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({ message: 'Unable to shortlist applicant' })
   }
 }

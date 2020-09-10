@@ -1,4 +1,6 @@
 const sendgrid = require('@sendgrid/mail')
+const Job = require('./../models/job.model')
+const User = require('./../models/user.model')
 
 sendgrid.setApiKey(process.env.API_KEY)
 const from = 'nishanth.mailer@gmail.com'
@@ -46,17 +48,44 @@ exports.comparisonReport = (to, username, jobName, postedBy, profileMatch, jobMa
   })
 }
 
-exports.roundResult = (to, cleared, username, designation, postedBy, round) => {
+exports.roundResult = (to, cleared, username, designation, postedBy) => {
   let html;
   if (cleared) {
-    html = `<h5>Hi ${username},</h5><br/>We are happy to inform you that you have made through the ${round} round for the interview process of ${designation} position at ${postedBy}.Soon you will be receiving the interview dates and tips. Stay tuned.<br/><br/>Thank you<br/>KiddoHire Dev`
+    html = `<h5>Hi ${username},</h5><br/>We are happy to inform you that you have been selected for the position of ${designation} at ${postedBy}.Please make sure to accept the offer in the applied job section. Once you accepted the offer, further procedure will be proceeded.<br/><br/>Thank you<br/>KiddoHire Dev`
   } else {
-    html = `<h5>Hi ${username},</h5><br/>We encourage your interest in ${designation} position at ${postedBy}.But we are sorry to inform that you do not make through the ${round} round. <br/><br/>Please don't loose hope. Tons of jobs are waiting for you. Keep trying.<br/><br/>Thank you<br/>KiddoHire Dev`
+    html = `<h5>Hi ${username},</h5><br/>We encourage your interest in ${designation} position at ${postedBy}.But we are sorry to inform that you do not make through the interview process. <br/><br/>Please don't loose hope. Tons of jobs are waiting for you. Keep trying.<br/><br/>Thank you<br/>KiddoHire Dev`
   }
   return sendgrid.send({
     to,
     from,
-    subject: 'Profile comparison report form KiddoHire',
+    subject: 'Interview result form KiddoHire',
     html
   })
+}
+
+exports.weeklyMail = async () => {
+  const jobs = await Job.find({}).populate('postedBy').populate('applicants.applicant')
+  jobs.forEach(job => {
+    job.applicants.forEach(applicant => {
+      const html = `<h6>Hi ${applicant.applicant.username || applicant.applicant.profileName}</h6><br/>
+      We are here to remember you about lifestyle in <b>${job.postedBy.username}</b>. Most of the developers choose to be part of it because of various reasons. Let us elaborate some of them to you.<br/>
+
+      Why we are the best?<br/>${job.postedBy.description}<br/><br/>
+      Why devs love us?<br/>${job.postedBy.careerGrowth}<br/><br/>
+
+      We are sure that ${applicant.username || applicant.profileName} suffice your thirst of technology and skill growth.<br/><br/>
+      Thank you,<br/>
+      KiddoHire Dev
+      `
+
+      const to = applicant.applicant.email
+      sendgrid.send({
+        to,
+        from,
+        subject: 'Weekly update form KiddoHire',
+        html
+      })
+    })
+  })
+
 }

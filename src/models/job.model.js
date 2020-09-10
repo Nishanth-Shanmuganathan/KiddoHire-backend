@@ -64,7 +64,11 @@ const jobSchema = mongoose.Schema({
       }
     }],
     default: []
-  }
+  },
+  shortlisted: [{
+    applicant: mongoose.Schema.Types.ObjectId,
+    accepted: Boolean
+  }]
 })
 
 // jobSchema.plugin(validator)

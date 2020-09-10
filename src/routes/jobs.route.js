@@ -1,7 +1,7 @@
 const express = require('express')
 // const bodyParser = require('body-parser')
 
-const { searchCity, addJob, fetchJobs, fetchAppliedJobs, applyJob, generateReport, rejectApplicant } = require('./../controllers/jobs.controller')
+const { searchCity, addJob, fetchJobs, fetchAppliedJobs, applyJob, generateReport, rejectApplicant, shortlistApplicant } = require('./../controllers/jobs.controller')
 
 const jobRouter = express.Router()
 
@@ -19,6 +19,6 @@ jobRouter.post('/job', addJob)
 
 jobRouter.get('/reject/:jobId/:userId', rejectApplicant)
 
-jobRouter.get('/shortlist/:jobId/userId', applyJob)
+jobRouter.get('/shortlist/:jobId/:userId', shortlistApplicant)
 
 module.exports = jobRouter
