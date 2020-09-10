@@ -48,6 +48,7 @@ exports.addConnection = async (req, res) => {
     }
     res.status(200).send({ message: 'User followed', connections })
   } catch (error) {
+    console.log(error);
     res.status(400).send({ message: 'Unable to follow' })
   }
 }
@@ -63,16 +64,11 @@ exports.removeConnection = async (req, res) => {
       !connection) {
       return res.status(400).send({ message: 'Invalid request' })
     }
-    user = await User.findById(user._id)
-    const index = user.follows.indexOf(connection._id)
+    user = await User.findById(user._id).populate('follows')
+    const index = user.follows.findIndex(ele => ele._id.toString() === connection._id.toString())
     user.follows.splice(index, 1)
     await user.save()
-    let connections;
-    if (user.role === 'hr') {
-      connections = await fetchConnections(user, 'developer')
-    } else {
-      connections = await fetchConnections(user, 'hr')
-    }
+    let connections = user.follows;
     res.status(200).send({ message: 'User unfollowed', connections })
   } catch (error) {
     res.status(400).send({ message: 'Unable to unfollow' })
@@ -80,5 +76,5 @@ exports.removeConnection = async (req, res) => {
 }
 
 fetchConnections = async (user, role) => {
-  return await User.find({ $and: [{ role }, { _id: { $nin: user.follows } }] })
+  return await User.find({ $and: [{ role }, { _id: { $nin: user.follows } }, { skills: { $in: user.skills } }] })
 }
