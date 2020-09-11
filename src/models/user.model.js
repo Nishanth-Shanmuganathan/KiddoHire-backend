@@ -47,13 +47,26 @@ const userSchema = mongoose.Schema({
   }],
   jobs: {
     type: [mongoose.Schema.Types.ObjectId],
+    ref: 'Job',
     default: []
   },
   follows: {
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'User',
     default: []
-  }
+  },
+  applications: [{
+    job: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Job'
+    },
+    status: [
+      {
+        cleared: Boolean,
+        round: String
+      }
+    ]
+  }]
 })
 
 userSchema.plugin(validator)

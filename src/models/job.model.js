@@ -49,22 +49,16 @@ const jobSchema = mongoose.Schema({
     }],
     required: true
   },
-  applicants: {
-    type: [{
+  applicants: [{
+    round: Number,
+    applicants: [{
       applicant: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
       },
-      jobMatch: Number,
-      status: {
-        type: [{
-          cleared: Boolean,
-          stage: String
-        }]
-      }
-    }],
-    default: []
-  },
+      jobMatch: Number
+    }]
+  }],
   shortlisted: [{
     applicant: mongoose.Schema.Types.ObjectId,
     accepted: Boolean
