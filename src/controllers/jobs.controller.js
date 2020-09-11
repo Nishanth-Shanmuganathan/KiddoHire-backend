@@ -58,16 +58,17 @@ exports.addJob = async (req, res) => {
     res.status(400).send({ message: 'Unable to add job' })
   }
 }
-exports.editJob = async (req, res) => {
+exports.editingJob = async (req, res) => {
   const user = req.user
-  const jobId = req.params.id
-  console.log('hi');
-  if (user.role !== 'hr' || job.postedBy !== user._id) {
-    return res.status(400).send({ message: 'Restricted user permissions' })
-  }
+  console.log('gii');
+  const jobId = req.params.jobId
   try {
 
     let job = await Job.findById(jobId)
+    if (user.role !== 'hr' || job.postedBy.toString() !== user._id.toString()) {
+      console.log(job.postedBy.toString(), user._id.toString());
+      return res.status(400).send({ message: 'Restricted user permissions' })
+    }
     job.skills = req.body.skills.map(skill => skill.toLowerCase().trim())
     job.designation = req.body.designation.trim()
     job.description = req.body.description.trim()
@@ -81,11 +82,10 @@ exports.editJob = async (req, res) => {
 
     await job.save()
     const dbUser = await User.findById(user._id)
-    console.log('hi');
-    res.status(200).send({ message: 'New job posted', user: dbUser })
+    res.status(200).send({ message: 'Job edited', user: dbUser })
   } catch (error) {
     console.log(error);
-    res.status(400).send({ message: 'Unable to add job' })
+    res.status(400).send({ message: 'Unable to edit job' })
   }
 }
 exports.applyJob = async (req, res, next) => {
