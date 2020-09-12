@@ -1,7 +1,7 @@
 const unirest = require("unirest");
 const Job = require('./../models/job.model')
 const User = require('./../models/user.model')
-const { comparisonReport, roundResult } = require('./../mails/job.mail');
+const { comparisonReport, roundResult, finalResult } = require('./../mails/job.mail');
 const { Mongoose } = require("mongoose");
 exports.searchCity = async (req, res) => {
   const string = req.params.city
@@ -234,7 +234,7 @@ exports.rejectApplicant = async (req, res) => {
     job.applicants[round].applicants.splice(candidateDetailsIndex, 1)
     await job.save()
     await dbCandidate.save()
-    // await roundResult(applicant.email, false, applicant.username || applicant.profileName, job.designation, job.postedBy.username)
+    await roundResult(applicant.email, false, applicant.username || applicant.profileName, job.designation, job.postedBy.username)
     res.status(200).send({ message: 'Applicant rejected' })
   } catch (error) {
     console.log(error);
@@ -258,25 +258,21 @@ exports.shortlistApplicant = async (req, res) => {
         dbCandidate.applications[index].status.push({ cleared: true, round })
       }
     })
-    console.log(parseInt(round) + 1, job.totalRounds, round + 1 === job.totalRounds);
     if (parseInt(round) + 1 >= job.totalRounds) {
       job.shortlisted.push({ applicant: dbCandidate._id, accepted: false })
+      finalResult(dbCandidate.email, true, dbCandidate.username || dbCandidate.profileName, job.designation, job.postedBy.username)
     } else {
       const candidateDetailsIndex = job.applicants[round].applicants.find(app => app.applicant.toString() === dbCandidate._id.toString())
       const candidateDetails = job.applicants[round].applicants.slice(candidateDetailsIndex, 1)
       job.applicants[parseInt(round) + 1].applicants.push(...candidateDetails)
+      roundResult(dbCandidate.email, true, dbCandidate.username || dbCandidate.profileName, job.designation, job.postedBy.username)
     }
     job.applicants[round].applicants.splice(candidateDetailsIndex, 1)
     await job.save()
     await dbCandidate.save()
-    await roundResult(dbCandidate.email, true, dbCandidate.username || dbCandidate.profileName, job.designation, job.postedBy.username)
     res.status(200).send({ message: 'Applicant shortlisted' })
   } catch (error) {
     console.log(error);
     res.status(400).send({ message: 'Unable to shortlist applicant' })
   }
-}
-
-exports.editJob = (req, res) => {
-
 }
