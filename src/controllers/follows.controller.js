@@ -12,7 +12,7 @@ exports.fetchConnection = async (req, res) => {
     }
     res.status(200).send({ connections })
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(400).send({ message: 'Unable to fetch connections' })
   }
 }
@@ -48,7 +48,7 @@ exports.addConnection = async (req, res) => {
     }
     res.status(200).send({ message: 'User followed', connections })
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(400).send({ message: 'Unable to follow' })
   }
 }

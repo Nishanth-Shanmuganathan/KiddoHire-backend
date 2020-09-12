@@ -7,16 +7,14 @@ exports.fetchProfile = async (req, res) => {
     const user = await User.findOne({ profileName })
     res.status(200).send({ user })
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(400).send({ message: 'Unable to fetch profile details' })
   }
 }
 
 exports.saveProfile = async (req, res) => {
   const cred = req.body
-  console.log('cred');
   const profileName = req.params.profileName
-  console.log(req.user.profileName, profileName);
   if (req.user.profileName !== profileName) {
     return res.status(401).send({ message: 'Unable to edit others details' })
   }
@@ -29,69 +27,62 @@ exports.saveProfile = async (req, res) => {
     }
     user[cred[0]] = cred[1]
     const result = await user.save()
-    console.log(result.reviews);
     res.status(200).send({ cred, user })
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(400).send({ message: 'Unable to save profile details' })
   }
 }
 exports.addReviews = async (req, res) => {
   const cred = req.body
   const profileName = req.params.profileName
-  console.log(req.user.profileName, profileName);
   if (req.user.profileName === profileName) {
     return res.status(400).send({ message: 'Unable to review yourself' })
   }
   try {
     const user = await User.findOne({ profileName })
-    console.log(user);
     if (!user) {
       throw new Error()
     }
     user[cred[0]] = cred[1]
     const result = await user.save()
-    console.log(result.reviews);
     res.status(200).send({ cred, user })
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(400).send({ message: 'Unable to save profile details' })
   }
 }
 
 
 exports.saveResume = async (req, res) => {
-  const cred = req.body
   const profileName = req.params.profileName
-  console.log(cred);
   if (req.user.profileName !== profileName) {
     res.status(400).send({ message: 'Unable to edit others details' })
   }
   try {
-    if (!cred.absPath) { throw new Error() }
     const user = await User.findById(req.user._id)
-    user.resume = cred.absPath
+    user.resumeBuffer = req.file.buffer
+    user.resume = process.env.URL + 'public/' + user._id + '/resume'
     await user.save()
-    res.status(200).send({ cred: ['resume', cred.absPath], user })
+    res.status(200).send({ cred: ['resume', user.resume], user })
   } catch (error) {
     res.status(400).send({ message: 'Unable to save profile details' })
   }
 }
 
 exports.saveImage = async (req, res) => {
-  const cred = req.body
   const profileName = req.params.profileName
-  console.log(cred);
   if (req.user.profileName !== profileName) {
     res.status(400).send({ message: 'Unable to edit others details' })
   }
   try {
-    if (!cred.absPath) { throw new Error() }
     const user = await User.findById(req.user._id)
-    user.imageURL = cred.absPath
+    user.image = req.file.buffer
+    user.imageURL = process.env.URL + 'public/' + user._id + '/image'
     await user.save()
-    res.status(200).send({ cred: ['profile picture', cred.absPath], user })
+    res.status(200).send({ cred: user.imageURL, user })
   } catch (error) {
+    // console.log(error);
     res.status(400).send({ message: 'Unable to save profile details' })
   }
 }
@@ -104,9 +95,14 @@ exports.saveCertifications = async (req, res) => {
   }
   try {
     const user = await User.findById(req.user._id)
-    user.certifications.push({ title: cred.title, certificate: cred.absPath })
+    user.certificateBuffer.push(req.file.buffer)
+    const certification = {
+      title: cred.title,
+      certificate: process.env.URL + 'public/' + user._id + '/certificate/' + (user.certificateBuffer.length - 1).toString()
+    }
+    user.certifications.push(certification)
     await user.save()
-    res.status(200).send({ cred: ['certificate', cred], user })
+    res.status(200).send({ cred: user.certifications, user })
   } catch (error) {
     res.status(400).send({ message: 'Unable to save profile details' })
   }

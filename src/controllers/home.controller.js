@@ -69,7 +69,6 @@ exports.feedBuilder = async (req, res) => {
   } else {
     keyword = 'job'
   }
-  console.log(keyword);
   const page = req.body.page || 1
   try {
     var result = await unirest("GET", "https://newscatcher.p.rapidapi.com/v1/search_free").query({

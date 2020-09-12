@@ -10,22 +10,21 @@ const homeRouter = require('./src/routes/home.route')
 const jobsRouter = require('./src/routes/jobs.route')
 const profileRouter = require('./src/routes/profile.route')
 const followsRouter = require('./src/routes/follows.route')
+const publicRouter = require('./src/routes/public.route')
 
 const { authentication } = require('./src/controllers/auth.controller')
 const { weeklyMail } = require('./src/mails/job.mail')
 
 const app = express()
+const User = require('./src/models/user.model')
 
 app.use(express.json())
 app.use(bodyParser.json())
 app.use(cors())
 
-app.use('/public', express.static('public'))
-app.use('/resume', express.static('resume'))
-app.use('/image', express.static('image'))
-app.use('/certificate', express.static('certificate'))
 
 app.use('/auth', authRouter)
+app.use('/public', publicRouter)
 app.use('/node-home', authentication, homeRouter)
 app.use('/node-jobs', authentication, jobsRouter)
 app.use('/node-profile', authentication, profileRouter)

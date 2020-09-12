@@ -54,19 +54,17 @@ exports.addJob = async (req, res) => {
     await dbUser.save()
     res.status(200).send({ message: 'New job posted', user: dbUser })
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(400).send({ message: 'Unable to add job' })
   }
 }
 exports.editingJob = async (req, res) => {
   const user = req.user
-  console.log('gii');
   const jobId = req.params.jobId
   try {
 
     let job = await Job.findById(jobId)
     if (user.role !== 'hr' || job.postedBy.toString() !== user._id.toString()) {
-      console.log(job.postedBy.toString(), user._id.toString());
       return res.status(400).send({ message: 'Restricted user permissions' })
     }
     job.skills = req.body.skills.map(skill => skill.toLowerCase().trim())
@@ -84,7 +82,7 @@ exports.editingJob = async (req, res) => {
     const dbUser = await User.findById(user._id)
     res.status(200).send({ message: 'Job edited', user: dbUser })
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(400).send({ message: 'Unable to edit job' })
   }
 }
@@ -120,7 +118,7 @@ exports.applyJob = async (req, res, next) => {
     // }
     res.status(200).send({ message: 'Job applied', jobs })
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(400).send({ message: 'Unable to apply' })
   }
 }
@@ -131,7 +129,7 @@ exports.fetchAppliedJobs = async (req, res) => {
     let jobs = await Job.find({ 'applicants.applicants.applicant': { $in: user._id } }).populate('postedBy')
     res.status(200).send({ jobs })
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(400).send({ message: 'Unable to fetch jobs' })
   }
 }
@@ -144,13 +142,10 @@ exports.fetchJobs = async (req, res) => {
       jobs = await Job.find({ postedBy: user._id }).populate('postedBy').populate('applicants.applicants.applicant')
     } else {
       jobs = await Job.find({ $and: [{ skills: { $in: user.skills } }, { 'applicants.applicants.applicant': { $nin: user._id } }] }).populate('postedBy')
-      if (!jobs.length) {
-        jobs = await Job.find({ 'applicants.applicants.applicant': { $nin: user._id } }).populate('postedBy')
-      }
     }
     res.status(200).send({ jobs })
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(400).send({ message: 'Unable to fetch jobs' })
   }
 }
@@ -164,9 +159,6 @@ exports.generateReport = async (req, res) => {
     let exp = {}
     let jobMatch = {}
     let canJoin = {}
-    console.log(round)
-    console.log(+round)
-    console.log(job.applicants[+round]);
     job.applicants[+round].applicants.forEach(ele => {
       //Calculating experience
       if (ele.applicant.experience > 15) {
@@ -204,7 +196,7 @@ exports.generateReport = async (req, res) => {
 
     res.status(200).send({ message: 'Report sent to your mail-id. Kindly check your inbox for the profile comparison report...' })
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(400).send({ message: 'Unable to send profile comparison report... Please try again.' })
   }
 }
@@ -241,7 +233,7 @@ exports.rejectApplicant = async (req, res) => {
     await roundResult(dbCandidate.email, false, dbCandidate.username || dbCandidate.profileName, job.designation, job.postedBy.username)
     res.status(200).send({ message: 'Applicant rejected' })
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(400).send({ message: 'Unable to reject applicant' })
   }
 }
@@ -276,7 +268,7 @@ exports.shortlistApplicant = async (req, res) => {
     await dbCandidate.save()
     res.status(200).send({ message: 'Applicant shortlisted' })
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(400).send({ message: 'Unable to shortlist applicant' })
   }
 }

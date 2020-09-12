@@ -19,7 +19,6 @@ exports.loginController = async (req, res) => {
         return res.status(200).send({ token, user })
       }
     }
-    console.log(process.env.JWT_STRING);
     const token = jwt.sign({ id: user._id }, process.env.JWT_STRING)
     user.token = token
     await user.save()
@@ -92,7 +91,7 @@ exports.verifyEmail = async (req, res, next) => {
       res.status(400).send({ message: 'Unable to fetch user...' })
     }
   } else {
-    console.log('ihi');
+    ('ihi');
     res.status(401).send({ message: 'Invalid link...' })
   }
 }
@@ -103,15 +102,12 @@ exports.authentication = async (req, res, next) => {
     const { id } = jwt.decode(token)
     const user = await User.findOne({ _id: id })
     if (!user || user.token !== token) {
-      console.log(!user, user.token !== token);
-      console.log(token);
-      console.log(user.token);
       throw new Error('Authentication failed')
     }
     req.user = user
     next()
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     res.status(400).send({ message: 'Authentication failed' })
   }
 }

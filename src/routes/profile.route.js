@@ -21,9 +21,7 @@ const resumeStorage = multer.diskStorage({
     const ext = MIME_TYPE_MAP[file.mimetype];
     const filename = req.user.profileName + "." + ext
     const absPath = process.env.URL + "resume/" + filename
-    console.log(absPath);
     req.body.absPath = absPath
-    console.log(req.body);
     cb(null, filename);
   }
 });
@@ -52,24 +50,6 @@ const certificateStorage = multer.diskStorage({
   }
 });
 
-const imageStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const isValid = MIME_TYPE_MAP_CERTIFICATE[file.mimetype];
-    let error = new Error("Invalid file type");
-    if (isValid) {
-      error = null;
-    }
-    cb(error, "image");
-  },
-  filename: (req, file, cb) => {
-    const ext = MIME_TYPE_MAP_CERTIFICATE[file.mimetype];
-    const filename = req.user.profileName + "." + ext
-    const absPath = process.env.URL + "image/" + filename
-    req.body.absPath = absPath
-    cb(null, filename);
-  }
-});
-
 const profileRouter = express.Router()
 
 profileRouter.get('/:profileName', fetchProfile)
@@ -78,10 +58,52 @@ profileRouter.patch('/:profileName', saveProfile)
 
 profileRouter.patch('/reviews/:profileName', addReviews)
 
-profileRouter.patch('/resume/:profileName', multer({ storage: resumeStorage }).single('resume'), saveResume)
 
-profileRouter.patch('/image/:profileName', multer({ storage: imageStorage }).single('image'), saveImage)
 
-profileRouter.patch('/certificate/:profileName', multer({ storage: certificateStorage }).single('certificate'), saveCertifications)
+const image = multer({
+  limits: {
+    fileSize: 2000000
+  },
+  fileFilter(req, file, cb) {
+    if (!file.originalname.match(/\.(png|jpg|jpeg)$/i)) {
+      return cb(new Error('Invalid file format'))
+    }
+    cb(undefined, true)
+  }
+})
+
+profileRouter.patch('/image/:profileName', image.single('image'), saveImage,
+  (error, req, res, next) => {
+    res.status(400).send({
+      message: error.message
+    })
+  })
+
+profileRouter.patch('/certificate/:profileName', image.single('certificate'), saveCertifications,
+  (error, req, res, next) => {
+    res.status(400).send({
+      message: error.message
+    })
+  })
+
+const resume = multer({
+  limits: {
+    fileSize: 2000000
+  },
+  fileFilter(req, file, cb) {
+    if (!file.originalname.match(/\.(pdf)$/i)) {
+      return cb(new Error('Invalid file format'))
+    }
+    cb(undefined, true)
+  }
+})
+
+profileRouter.patch('/resume/:profileName', resume.single('resume'), saveResume,
+  (error, req, res, next) => {
+    res.status(400).send({
+      message: error.message
+    })
+  })
+
 
 module.exports = profileRouter

@@ -30,6 +30,8 @@ const userSchema = mongoose.Schema({
   work: String,
   education: String,
   resume: String,
+  resumeBuffer: Buffer,
+  image: Buffer,
   imageURL: String,
   skills: [String],
   languages: [String],
@@ -37,6 +39,7 @@ const userSchema = mongoose.Schema({
     title: String,
     link: String
   }],
+  certificateBuffer: [Buffer],
   certifications: [{
     certificate: String,
     title: String
