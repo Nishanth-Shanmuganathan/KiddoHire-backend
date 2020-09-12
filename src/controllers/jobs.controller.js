@@ -207,8 +207,9 @@ exports.generateReport = async (req, res) => {
 
 matchCalculator = (arr, arr2) => {
   let count = 0;
+  arr2 = arr2.map(ele => ele.toLowerCase())
   arr.forEach(element => {
-    count = arr2.indexOf(element) + 1 ? count + 1 : count
+    count = arr2.indexOf(element.toLowerCase()) + 1 ? count + 1 : count
   });
   return parseInt(count / arr.length * 100)
 }
@@ -257,17 +258,18 @@ exports.shortlistApplicant = async (req, res) => {
         dbCandidate.applications[index].status.push({ cleared: true, round })
       }
     })
-    if (round + 1 === job.totalRounds) {
+    console.log(parseInt(round) + 1, job.totalRounds, round + 1 === job.totalRounds);
+    if (parseInt(round) + 1 >= job.totalRounds) {
       job.shortlisted.push({ applicant: dbCandidate._id, accepted: false })
     } else {
       const candidateDetailsIndex = job.applicants[round].applicants.find(app => app.applicant.toString() === dbCandidate._id.toString())
       const candidateDetails = job.applicants[round].applicants.slice(candidateDetailsIndex, 1)
       job.applicants[parseInt(round) + 1].applicants.push(...candidateDetails)
-      job.applicants[round].applicants.splice(candidateDetailsIndex, 1)
     }
+    job.applicants[round].applicants.splice(candidateDetailsIndex, 1)
     await job.save()
     await dbCandidate.save()
-    await roundResult(applicant.email, true, applicant.username || applicant.profileName, job.designation, job.postedBy.username)
+    await roundResult(dbCandidate.email, true, dbCandidate.username || dbCandidate.profileName, job.designation, job.postedBy.username)
     res.status(200).send({ message: 'Applicant shortlisted' })
   } catch (error) {
     console.log(error);

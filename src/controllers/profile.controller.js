@@ -52,7 +52,7 @@ exports.addReviews = async (req, res) => {
     user[cred[0]] = cred[1]
     const result = await user.save()
     console.log(result.reviews);
-    res.status(200).send({ cred, user: req.user })
+    res.status(200).send({ cred, user })
   } catch (error) {
     console.log(error);
     res.status(400).send({ message: 'Unable to save profile details' })
@@ -139,10 +139,10 @@ checkDetailsCompletionUser = (user) => {
 checkDetailsCompletionHr = user => {
   let completion = 0
   if (user.description) {
-    completion += 10
+    completion += 20
   }
   if (user.emailVerified) {
-    completion += 10
+    completion += 20
   }
   if (user.username) {
     completion += 10
