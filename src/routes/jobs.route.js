@@ -11,7 +11,7 @@ jobRouter.get('/jobs', fetchJobs)
 
 jobRouter.get('/jobs-applied', fetchAppliedJobs)
 
-jobRouter.get('/generate-report/:jobId', generateReport)
+jobRouter.get('/generate-report/:jobId/:round', generateReport)
 
 jobRouter.get('/job/:jobId', applyJob, fetchJobs)
 

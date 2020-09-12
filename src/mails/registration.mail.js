@@ -7,6 +7,6 @@ exports.registrationMail = (to, profileName, secretCode) => {
     to,
     from: 'nishanth.mailer@gmail.com',
     subject: 'Registration Link from KiddoHire',
-    html: `Here is your link http://localhost:4200/profile/${profileName}?key=${secretCode}`
+    html: `Here is your link ${process.env.URL}profile/${profileName}?key=${secretCode}`
   })
 }

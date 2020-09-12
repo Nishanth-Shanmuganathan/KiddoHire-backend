@@ -59,7 +59,7 @@ exports.roundResult = (to, cleared, username, designation, postedBy) => {
   return sendgrid.send({
     to,
     from,
-    subject: 'Interview result form KiddoHire',
+    subject: 'Round result form KiddoHire',
     html
   })
 }

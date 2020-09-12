@@ -158,12 +158,16 @@ exports.fetchJobs = async (req, res) => {
 exports.generateReport = async (req, res) => {
   const user = req.user
   const jobId = req.params.jobId
+  const round = req.params.round || 1
   try {
-    const job = await Job.findById(jobId).populate('postedBy').populate('applicants.applicant')
+    const job = await Job.findById(jobId).populate('postedBy').populate('applicants.applicants.applicant')
     let exp = {}
     let jobMatch = {}
     let canJoin = {}
-    job.applicants.forEach(ele => {
+    console.log(round)
+    console.log(+round)
+    console.log(job.applicants[+round]);
+    job.applicants[+round].applicants.forEach(ele => {
       //Calculating experience
       if (ele.applicant.experience > 15) {
         exp['16-20'] = exp['16-20'] ? exp['16-20'] + 1 : 1
@@ -234,7 +238,7 @@ exports.rejectApplicant = async (req, res) => {
     job.applicants[round].applicants.splice(candidateDetailsIndex, 1)
     await job.save()
     await dbCandidate.save()
-    await roundResult(applicant.email, false, applicant.username || applicant.profileName, job.designation, job.postedBy.username)
+    await roundResult(dbCandidate.email, false, dbCandidate.username || dbCandidate.profileName, job.designation, job.postedBy.username)
     res.status(200).send({ message: 'Applicant rejected' })
   } catch (error) {
     console.log(error);
@@ -258,11 +262,11 @@ exports.shortlistApplicant = async (req, res) => {
         dbCandidate.applications[index].status.push({ cleared: true, round })
       }
     })
+    const candidateDetailsIndex = job.applicants[round].applicants.find(app => app.applicant.toString() === dbCandidate._id.toString())
     if (parseInt(round) + 1 >= job.totalRounds) {
       job.shortlisted.push({ applicant: dbCandidate._id, accepted: false })
       finalResult(dbCandidate.email, true, dbCandidate.username || dbCandidate.profileName, job.designation, job.postedBy.username)
     } else {
-      const candidateDetailsIndex = job.applicants[round].applicants.find(app => app.applicant.toString() === dbCandidate._id.toString())
       const candidateDetails = job.applicants[round].applicants.slice(candidateDetailsIndex, 1)
       job.applicants[parseInt(round) + 1].applicants.push(...candidateDetails)
       roundResult(dbCandidate.email, true, dbCandidate.username || dbCandidate.profileName, job.designation, job.postedBy.username)
